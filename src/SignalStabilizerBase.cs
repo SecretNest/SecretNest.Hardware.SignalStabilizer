@@ -16,6 +16,10 @@ namespace SecretNest.Hardware
         private AutoResetEvent _valueChanged;
         private bool _needQuit;
 
+        protected SignalStabilizerBase(int waitingTimeMilliseconds) : this(new TimeSpan(0, 0, 0, 0, waitingTimeMilliseconds))
+        {
+        }
+
         protected SignalStabilizerBase(TimeSpan waitingTime)
         {
             _waitingTime = waitingTime;

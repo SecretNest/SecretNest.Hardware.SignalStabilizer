@@ -15,6 +15,10 @@ namespace SecretNest.Hardware
         {
         }
 
+        public SignalStabilizer(int waitingTimeMilliseconds) : base(waitingTimeMilliseconds)
+        {
+        }
+
         public override void SetValueGeneric(object value) => SetValue((T) value);
 
         private protected override void AnnounceValue()
