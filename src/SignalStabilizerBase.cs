@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SecretNest.Hardware
 {
@@ -32,9 +33,13 @@ namespace SecretNest.Hardware
         public abstract object ValueGeneric { get; }
         public abstract void SetValueGeneric(object value);
 
-        private protected void AfterValueUpdated()
+        private protected void BeforeValueUpdating()
         {
             _effectedTime = DateTime.Now + _waitingTime;
+        }
+
+        private protected void AfterValueUpdating()
+        {
             _valueChanged.Set();
         }
 
@@ -55,21 +60,23 @@ namespace SecretNest.Hardware
                 while (true)
                 {
                     var waiting = _effectedTime - DateTime.Now;
-                    if (waiting < TimeSpan.Zero)
+                    if (waiting > TimeSpan.Zero)
                     {
-                        Thread.Sleep(waiting);
+                        Task.Delay(waiting).Wait();
                     }
-                    else
+                    else if (!IsNextChanged())
                     {
                         break;
                     }
                 }
 
-                AnnounceValue();
+                AnnounceValueIfChanged();
             }
         }
 
-        private protected abstract void AnnounceValue();
+        private protected abstract bool IsNextChanged();
+
+        private protected abstract void AnnounceValueIfChanged();
 
         protected virtual void Dispose(bool disposing)
         {

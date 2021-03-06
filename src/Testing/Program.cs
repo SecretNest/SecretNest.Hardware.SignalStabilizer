@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using SecretNest.Hardware;
 
 namespace Testing
@@ -12,19 +13,25 @@ namespace Testing
             stabilizer.ValueChanged += Stabilizer_ValueChanged;
 
             stabilizer.SetValue(100);
-            Thread.Sleep(100);
+            Task.Delay(200).Wait();
+            //output 100
 
             stabilizer.SetValue(101);
+            Task.Delay(50).Wait();
             stabilizer.SetValue(102);
+            Task.Delay(10).Wait();
             stabilizer.SetValue(100);
-            Thread.Sleep(100);
+            Task.Delay(200).Wait();
+            //output nothing. last value 100 was announced previously.
 
             stabilizer.SetValue(200);
             stabilizer.SetValue(201);
-            Thread.Sleep(100);
+            Task.Delay(200).Wait();
+            //output 201
 
             stabilizer.SetValue(100);
-            Thread.Sleep(100);
+            Task.Delay(200).Wait();
+            //output 100
 
             stabilizer.Dispose();
         }

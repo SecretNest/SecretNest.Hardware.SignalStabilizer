@@ -9,19 +9,37 @@ namespace SecretNest.Hardware
         public T Value => _currentValue;
         public override object ValueGeneric => _currentValue;
 
-        private T _nextValue, _currentValue;
+        private T _nextValue, _comparedValue, _currentValue;
 
-        public SignalStabilizer(TimeSpan waitingTime) : base(waitingTime)
+        private object _lock = new object();
+
+        public SignalStabilizer(TimeSpan waitingTime, T initial = default(T)) : base(waitingTime)
         {
+            _currentValue = initial;
         }
 
-        public SignalStabilizer(int waitingTimeMilliseconds) : base(waitingTimeMilliseconds)
+        public SignalStabilizer(int waitingTimeMilliseconds, T initial = default(T)) : base(waitingTimeMilliseconds)
         {
+            _currentValue = initial;
         }
 
         public override void SetValueGeneric(object value) => SetValue((T) value);
 
-        private protected override void AnnounceValue()
+        private protected override bool IsNextChanged()
+        {
+            var working = _nextValue;
+            if (working.Equals(_comparedValue))
+            {
+                return false;
+            }
+            else
+            {
+                _comparedValue = working;
+                return true;
+            }
+        }
+
+        private protected override void AnnounceValueIfChanged()
         {
             var working = _nextValue;
             if (_currentValue.Equals(working)) return;
@@ -31,8 +49,9 @@ namespace SecretNest.Hardware
 
         public void SetValue(T value)
         {
+            BeforeValueUpdating();
             _nextValue = value;
-            AfterValueUpdated();
+            AfterValueUpdating();
         }
 
         public event EventHandler<ValueChangedEventArgs<T>> ValueChanged;
