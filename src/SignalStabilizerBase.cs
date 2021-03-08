@@ -15,17 +15,24 @@ namespace SecretNest.Hardware
         private AutoResetEvent _valueChanged;
         private bool _needQuit;
 
+        private readonly ManualResetEventSlim _started;
+
         protected SignalStabilizerBase(int waitingTimeMilliseconds, ThreadPriority threadPriority = ThreadPriority.AboveNormal) : this(new TimeSpan(0, 0, 0, 0, waitingTimeMilliseconds), threadPriority)
         {
         }
 
         protected SignalStabilizerBase(TimeSpan waitingTime, ThreadPriority threadPriority = ThreadPriority.AboveNormal)
         {
+            _started = new ManualResetEventSlim();
             _waitingTime = waitingTime;
             _valueChanged = new AutoResetEvent(false);
             _needQuit = false;
-            _thread = new Thread(Notifier) {IsBackground = true, Priority = threadPriority};
+            _thread = new Thread(Notifier) { Priority = threadPriority};
             _thread.Start();
+            _started.Wait();
+            _thread.IsBackground = true;
+            _started.Dispose();
+            _started = null;
         }
 
         public abstract object ValueGeneric { get; }
@@ -50,6 +57,7 @@ namespace SecretNest.Hardware
 
         private void Notifier()
         {
+            _started.Set();
             while (true)
             {
                 _valueChanged.WaitOne();

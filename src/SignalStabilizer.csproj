@@ -11,10 +11,11 @@
     <PackageProjectUrl>https://github.com/SecretNest/SecretNest.Hardware.SignalStabilizer</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SecretNest/SecretNest.Hardware.SignalStabilizer</RepositoryUrl>
     <PackageReleaseNotes>Set the working thread as background.
-Allow to set thread priority while initializing.</PackageReleaseNotes>
+Allow to set thread priority while initializing.
+Increase the initializing speed of the working thread.</PackageReleaseNotes>
     <Description>Stabilize the signal to avoid rapid vibrations of values.</Description>
     <Copyright>Allen Cui / SecretNest.info</Copyright>
-    <Version>1.0.3</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <ItemGroup>
