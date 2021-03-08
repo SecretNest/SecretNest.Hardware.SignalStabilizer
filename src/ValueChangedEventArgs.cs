@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SecretNest.Hardware
+﻿namespace SecretNest.Hardware
 {
     public class ValueChangedEventArgs<T> : ValueChangedEventArgsBase
     {

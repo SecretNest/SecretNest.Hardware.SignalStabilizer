@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,16 +15,16 @@ namespace SecretNest.Hardware
         private AutoResetEvent _valueChanged;
         private bool _needQuit;
 
-        protected SignalStabilizerBase(int waitingTimeMilliseconds) : this(new TimeSpan(0, 0, 0, 0, waitingTimeMilliseconds))
+        protected SignalStabilizerBase(int waitingTimeMilliseconds, ThreadPriority threadPriority = ThreadPriority.AboveNormal) : this(new TimeSpan(0, 0, 0, 0, waitingTimeMilliseconds), threadPriority)
         {
         }
 
-        protected SignalStabilizerBase(TimeSpan waitingTime)
+        protected SignalStabilizerBase(TimeSpan waitingTime, ThreadPriority threadPriority = ThreadPriority.AboveNormal)
         {
             _waitingTime = waitingTime;
             _valueChanged = new AutoResetEvent(false);
             _needQuit = false;
-            _thread = new Thread(Notifier);
+            _thread = new Thread(Notifier) {IsBackground = true, Priority = threadPriority};
             _thread.Start();
         }
 

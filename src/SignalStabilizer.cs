@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SecretNest.Hardware
 {
@@ -11,14 +9,12 @@ namespace SecretNest.Hardware
 
         private T _nextValue, _comparedValue, _currentValue;
 
-        private object _lock = new object();
-
-        public SignalStabilizer(TimeSpan waitingTime, T initial = default(T)) : base(waitingTime)
+        public SignalStabilizer(TimeSpan waitingTime, T initial = default) : base(waitingTime)
         {
             _currentValue = initial;
         }
 
-        public SignalStabilizer(int waitingTimeMilliseconds, T initial = default(T)) : base(waitingTimeMilliseconds)
+        public SignalStabilizer(int waitingTimeMilliseconds, T initial = default) : base(waitingTimeMilliseconds)
         {
             _currentValue = initial;
         }
