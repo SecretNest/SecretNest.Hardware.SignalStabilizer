@@ -64,6 +64,10 @@ namespace SecretNest.Hardware
                     {
                         Task.Delay(waiting).Wait();
                     }
+                    else if (_needQuit)
+                    {
+                        return;
+                    }
                     else if (!IsNextChanged())
                     {
                         break;
