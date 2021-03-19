@@ -91,7 +91,7 @@ namespace SecretNest.Hardware
             }
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (!_disposedValue)
             {
